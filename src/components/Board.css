@@ -3,8 +3,10 @@
   background-color: #2563eb;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Vertical shadow only */
   position: relative;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .winning-highlight {
@@ -87,28 +89,32 @@
 @media (max-width: 768px) {
   .board {
     padding: 10px;
+    max-width: calc(100% - 5px); /* Ensure board doesn't overflow */
+    margin-right: 2.5px;
+    box-sizing: border-box; /* Include padding in width calculation */
+    justify-content: center; /* Center columns in the board */
   }
   
   .column .cell {
-    width: 50px;
-    height: 50px;
+    width: 45px; /* Slightly reduce cell size */
+    height: 45px;
     margin: 3px;
   }
   
   .falling-disc {
-    width: 50px;
-    height: 50px;
+    width: 45px; /* Match the cell size */
+    height: 45px;
     margin: 3px;
-    top: -56px; /* Smaller starting position for mobile */
+    top: -51px; /* Adjusted for smaller size */
   }
   
   /* Mobile-specific animation with smaller cell size */
   @keyframes fall-and-bounce {
     0% { transform: translateY(0); }
-    83% { transform: translateY(calc(56px * var(--fall-distance, 1))); }
-    84% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Initial impact */
-    90% { transform: translateY(calc(56px * var(--fall-distance, 1) - 7px)); } /* Bounce up */
-    96% { transform: translateY(calc(56px * var(--fall-distance, 1) + 2px)); } /* Bounce down */
-    100% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Settle */
+    83% { transform: translateY(calc(51px * var(--fall-distance, 1))); }
+    84% { transform: translateY(calc(51px * var(--fall-distance, 1))); } /* Initial impact */
+    90% { transform: translateY(calc(51px * var(--fall-distance, 1) - 7px)); } /* Bounce up */
+    96% { transform: translateY(calc(51px * var(--fall-distance, 1) + 2px)); } /* Bounce down */
+    100% { transform: translateY(calc(51px * var(--fall-distance, 1))); } /* Settle */
   }
 } 

@@ -28,6 +28,7 @@ const Game: React.FC = () => {
   const [processingMove, setProcessingMove] = useState<boolean>(false);
   const [winningPieces, setWinningPieces] = useState<WinningPiece[]>([]);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [stats, setStats] = useState(StatsManager.getStats());
   const boardRef = useRef<BoardHandle>(null);
 
   // Toggle sound on/off
@@ -36,6 +37,19 @@ const Game: React.FC = () => {
     setSoundEnabled(newSoundState);
     SoundManager.toggleSound(newSoundState);
   };
+
+  // Update stats when they change
+  useEffect(() => {
+    const handleStatsChange = () => {
+      setStats(StatsManager.getStats());
+    };
+    
+    window.addEventListener('stats-updated', handleStatsChange);
+    
+    return () => {
+      window.removeEventListener('stats-updated', handleStatsChange);
+    };
+  }, []);
 
   // Make AI move after player's turn
   useEffect(() => {
@@ -525,35 +539,25 @@ const Game: React.FC = () => {
     return playerNum === PLAYER ? "Your turn" : "Claude's turn";
   };
 
+  // Calculate draws
+  const draws = stats.gamesPlayed - stats.playerWins - stats.aiWins;
+
   return (
     <div className="game">
       <Header 
         soundEnabled={soundEnabled} 
         toggleSound={toggleSound} 
         resetGame={resetGame}
+        gameOver={gameOver}
+        winner={winner}
+        currentPlayer={currentPlayer}
+        isThinking={isThinking}
+        getPlayerName={getPlayerName}
+        getPlayerTurnText={getPlayerTurnText}
+        playerWins={stats.playerWins}
+        aiWins={stats.aiWins}
+        draws={draws}
       />
-      
-      <div className="game-info">
-        {gameOver ? (
-          winner ? (
-            <div className="winner">
-              {getPlayerName(winner)} won!
-              <div className={`winner-indicator ${winner === PLAYER ? 'red' : 'yellow'}`}></div>
-            </div>
-          ) : (
-            <div className="draw">It's a draw!</div>
-          )
-        ) : (
-          <div className="current-player">
-            {isThinking ? (
-              <>Claude is thinking...</>
-            ) : (
-              <>{getPlayerTurnText(currentPlayer)}</>
-            )}
-            <div className={`player-indicator ${currentPlayer === PLAYER ? 'red' : 'yellow'}`}></div>
-          </div>
-        )}
-      </div>
       
       <Board 
         ref={boardRef}

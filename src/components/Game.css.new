@@ -6,7 +6,6 @@
   max-width: 700px;
   margin: 0 auto;
   color: #2563eb;
-  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 h1 {
@@ -22,10 +21,7 @@ h1 {
 
 @media (max-width: 768px) {
   .game {
-    padding: 5px;
-    margin: 0 auto;
-    width: calc(100% - 5px);
-    max-width: calc(100% - 5px);
+    padding: 10px;
   }
   
   h1 {

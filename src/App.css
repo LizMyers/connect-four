@@ -7,6 +7,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5f8fa;
   color: #333;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .App {
@@ -19,7 +22,13 @@ body {
 
 @media (max-width: 600px) {
   .App {
-    padding: 10px 5px;
+    padding: 10px 10px;
+  }
+  
+  body {
+    margin-right: 5px !important;
+    margin-left: 5px !important;
+    overflow-x: hidden;
   }
 }
 

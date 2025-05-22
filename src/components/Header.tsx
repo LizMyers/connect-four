@@ -1,32 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import StatsManager from '../utils/StatsManager';
+import React from 'react';
 import '../styles/Header.css';
 
 interface HeaderProps {
   soundEnabled: boolean;
   toggleSound: () => void;
   resetGame: () => void;
+  gameOver: boolean;
+  winner: number | null;
+  currentPlayer: number;
+  isThinking: boolean;
+  getPlayerName: (playerNum: number) => string;
+  getPlayerTurnText: (playerNum: number) => string;
+  playerWins: number;
+  aiWins: number;
+  draws: number;
 }
 
-const Header: React.FC<HeaderProps> = ({ soundEnabled, toggleSound, resetGame }) => {
-  const [stats, setStats] = useState(StatsManager.getStats());
-  
-  useEffect(() => {
-    // Update stats when the component mounts
-    setStats(StatsManager.getStats());
-    
-    // Create a custom event listener to refresh stats when they change
-    const handleStatsChange = () => {
-      setStats(StatsManager.getStats());
-    };
-    
-    window.addEventListener('stats-updated', handleStatsChange);
-    
-    return () => {
-      window.removeEventListener('stats-updated', handleStatsChange);
-    };
-  }, []);
-  
+const Header: React.FC<HeaderProps> = ({ 
+  soundEnabled, 
+  toggleSound, 
+  resetGame,
+  gameOver,
+  winner,
+  currentPlayer,
+  isThinking,
+  getPlayerName,
+  getPlayerTurnText,
+  playerWins,
+  aiWins,
+  draws
+}) => {
   return (
     <header className="game-header">
       <div className="header-row">
@@ -56,14 +59,36 @@ const Header: React.FC<HeaderProps> = ({ soundEnabled, toggleSound, resetGame })
           </button>
         </div>
       </div>
-      <div className="header-row">
-        <div className="games-played">
-          Games played: {stats.gamesPlayed}
-        </div>
+      
+      <div className="header-row turn-indicator-row">
+        {gameOver ? (
+          winner ? (
+            <div className="winner">
+              {getPlayerName(winner)} won!
+              <div className={`winner-indicator ${winner === 1 ? 'red' : 'yellow'}`}></div>
+            </div>
+          ) : (
+            <div className="draw">It's a draw!</div>
+          )
+        ) : (
+          <div className="current-player">
+            {isThinking ? (
+              <>Claude is thinking...</>
+            ) : (
+              <>{getPlayerTurnText(currentPlayer)}</>
+            )}
+            <div className={`player-indicator ${currentPlayer === 1 ? 'red' : 'yellow'}`}></div>
+          </div>
+        )}
+      </div>
+      
+      <div className="header-row stats-row">
         <div className="win-stats">
-          <span className="player-wins">Liz wins: {stats.playerWins}</span>
+          <span className="player-wins">Your wins: {playerWins}</span>
           <span className="separator">|</span>
-          <span className="ai-wins">Claude wins: {stats.aiWins}</span>
+          <span className="ai-wins">Claude wins: {aiWins}</span>
+          <span className="separator">|</span>
+          <span className="draws">Draws: {draws}</span>
         </div>
       </div>
     </header>

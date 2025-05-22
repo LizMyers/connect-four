@@ -6,6 +6,20 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f1f5f9;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  body {
+    margin: 0 2.5px;
+    width: calc(100% - 5px);
+  }
+  
+  #root {
+    margin: 0;
+    width: 100%;
+  }
 }
 
 code {
