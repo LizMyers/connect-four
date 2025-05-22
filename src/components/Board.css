@@ -1,36 +1,86 @@
-.board {
-  display: flex;
+.board-container {
+  position: relative;
+  width: 100%;
+  max-width: 585px; /* (70px cell + 10px margin) * 7 columns + 15px padding on each side */
+  height: 520px; /* (70px cell + 10px margin) * 6 rows + 15px padding on each side */
+  margin: 0 auto;
+}
+
+/* Back layer - blue background */
+.board-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #2563eb;
-  padding: 15px;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  position: relative;
+  z-index: 1;
 }
 
-.winning-highlight {
+/* Middle layer - contains all discs (falling and placed) */
+.discs-container {
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.25);
-  border: 3px solid white;
-  border-radius: 40px;
-  z-index: 20;
-  pointer-events: none;
-  animation: highlight-pulse 1.5s infinite;
-  transform-origin: center center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
 }
 
-@keyframes highlight-pulse {
-  0% { opacity: 0.4; box-shadow: 0 0 5px white, 0 0 10px white; }
-  50% { opacity: 0.8; box-shadow: 0 0 15px white, 0 0 25px white; }
-  100% { opacity: 0.4; box-shadow: 0 0 5px white, 0 0 10px white; }
+/* Front layer - board face with holes */
+.board-front {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2563eb;
+  border-radius: 10px;
+  padding: 15px;
+  z-index: 3;
 }
 
 .column {
   display: flex;
   flex-direction: column-reverse;
+  flex: 1;
+}
+
+.cell-hole {
+  width: 70px;
+  height: 70px;
+  background-color: transparent;
+  border-radius: 50%;
+  margin: 5px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  /* Create the hole effect */
+  border: 3px solid #1e3a8a;
+  box-sizing: border-box;
   position: relative;
 }
 
-.falling-disc {
+/* Make actual transparent holes in the board face */
+.cell-hole::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background-color: transparent;
+  /* Cut a hole in the board face */
+  box-shadow: 0 0 0 100px #2563eb;
+  clip-path: circle(50%);
+  /* Create a 3D effect for the holes */
+  border: 4px solid #1e3a8a;
+}
+
+/* Common disc styles */
+.falling-disc, .placed-disc {
   position: absolute;
   width: 70px;
   height: 70px;
@@ -38,77 +88,99 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5px;
-  z-index: 10;
   pointer-events: none;
-  /* Start at the top of the column */
-  top: -80px; 
+  transform: translate(-50%, -50%);
+}
+
+/* Specific to falling discs */
+.falling-disc {
+  /* Start at the top of the container */
+  top: -35px;
   animation-name: fall-and-bounce !important;
   animation-duration: 0.6s !important;
   animation-timing-function: cubic-bezier(0.5, 0, 1, 1) !important; /* Accelerate downward (gravity) */
   animation-fill-mode: forwards !important;
 }
 
-/* Perfect linear fall with bounce ONLY at the end */
-@keyframes fall-and-bounce {
-  /* No keyframes at the beginning - smooth acceleration */
-  0% { transform: translateY(0); }
-  /* Single frame at exact landing point to ensure smooth motion */
-  83% { transform: translateY(calc(80px * var(--fall-distance, 1))); }
-  /* Impact and clear bounce at the bottom only - in the correct final row */
-  84% { transform: translateY(calc(80px * var(--fall-distance, 1))); } /* Initial impact */
-  90% { transform: translateY(calc(80px * var(--fall-distance, 1) - 10px)); } /* Bounce up */
-  96% { transform: translateY(calc(80px * var(--fall-distance, 1) + 3px)); } /* Bounce down */
-  100% { transform: translateY(calc(80px * var(--fall-distance, 1))); } /* Settle */
+/* Specific to placed discs */
+.placed-disc {
+  transform: translate(-50%, 50%);
 }
 
-.falling-disc .disc-inner {
+/* Winning disc effect */
+.placed-disc.winning .disc-inner {
+  animation: winning-pulse 1.5s infinite;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.7), 0 0 15px rgba(255, 255, 255, 0.7);
+  filter: brightness(1.2);
+}
+
+@keyframes winning-pulse {
+  0% { transform: scale(0.9); filter: brightness(1.1); }
+  50% { transform: scale(1.07); filter: brightness(1.3); }
+  100% { transform: scale(0.9); filter: brightness(1.1); }
+}
+
+.disc-inner {
   width: 85%;
   height: 85%;
   border-radius: 50%;
 }
 
-.falling-disc.red .disc-inner {
-  width: 85%;
-  height: 85%;
-  border-radius: 50%;
+.red .disc-inner {
   background-color: #ef4444;
   box-shadow: inset 0 0 10px #b91c1c, 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.falling-disc.yellow .disc-inner {
-  width: 85%;
-  height: 85%;
-  border-radius: 50%;
+.yellow .disc-inner {
   background-color: #facc15;
   box-shadow: inset 0 0 10px #ca8a04, 0 0 10px rgba(32, 12, 72, 0.3);
 }
 
+/* Perfect linear fall with bounce ONLY at the end */
+@keyframes fall-and-bounce {
+  /* No keyframes at the beginning - smooth acceleration */
+  0% { transform: translateX(-50%) translateY(0); }
+  /* Single frame at exact landing point to ensure smooth motion */
+  83% { transform: translateX(-50%) translateY(calc(80px * var(--fall-distance, 1))); }
+  /* Impact and clear bounce at the bottom only - in the correct final row */
+  84% { transform: translateX(-50%) translateY(calc(80px * var(--fall-distance, 1))); } /* Initial impact */
+  90% { transform: translateX(-50%) translateY(calc(80px * var(--fall-distance, 1) - 10px)); } /* Bounce up */
+  96% { transform: translateX(-50%) translateY(calc(80px * var(--fall-distance, 1) + 3px)); } /* Bounce down */
+  100% { transform: translateX(-50%) translateY(calc(80px * var(--fall-distance, 1))); } /* Settle */
+}
+
 @media (max-width: 768px) {
-  .board {
+  .board-container {
+    max-width: 385px; /* (50px cell + 6px margin) * 7 columns + 10px padding on each side */
+    height: 330px; /* (50px cell + 6px margin) * 6 rows + 10px padding on each side */
+  }
+  
+  .board-front {
     padding: 10px;
   }
   
-  .column .cell {
+  .cell-hole {
     width: 50px;
     height: 50px;
     margin: 3px;
   }
   
-  .falling-disc {
+  .falling-disc, .placed-disc {
     width: 50px;
     height: 50px;
-    margin: 3px;
-    top: -56px; /* Smaller starting position for mobile */
+  }
+  
+  .falling-disc {
+    top: -25px;
   }
   
   /* Mobile-specific animation with smaller cell size */
   @keyframes fall-and-bounce {
-    0% { transform: translateY(0); }
-    83% { transform: translateY(calc(56px * var(--fall-distance, 1))); }
-    84% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Initial impact */
-    90% { transform: translateY(calc(56px * var(--fall-distance, 1) - 7px)); } /* Bounce up */
-    96% { transform: translateY(calc(56px * var(--fall-distance, 1) + 2px)); } /* Bounce down */
-    100% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Settle */
+    0% { transform: translateX(-50%) translateY(0); }
+    83% { transform: translateX(-50%) translateY(calc(56px * var(--fall-distance, 1))); }
+    84% { transform: translateX(-50%) translateY(calc(56px * var(--fall-distance, 1))); } /* Initial impact */
+    90% { transform: translateX(-50%) translateY(calc(56px * var(--fall-distance, 1) - 7px)); } /* Bounce up */
+    96% { transform: translateX(-50%) translateY(calc(56px * var(--fall-distance, 1) + 2px)); } /* Bounce down */
+    100% { transform: translateX(-50%) translateY(calc(56px * var(--fall-distance, 1))); } /* Settle */
   }
 } 

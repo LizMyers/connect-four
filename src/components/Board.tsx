@@ -117,7 +117,7 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ board, onClick, winningPiec
       
       // Offset to place the highlight's center at the center of the connection
       const offsetX = (width / 2) - (cellSize / 2);
-      const offsetY = 0;
+      // offsetY not needed here
       
       left = centerX - offsetX;
       top = centerY - (height / 2);
@@ -133,7 +133,7 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ board, onClick, winningPiec
       
       // Offset to place the highlight's center at the center of the connection
       const offsetX = (width / 2) - (cellSize / 2);
-      const offsetY = 0;
+      // offsetY not needed here
       
       left = centerX - offsetX;
       top = centerY - (height / 2);
@@ -149,45 +149,65 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ board, onClick, winningPiec
     };
   };
 
-  const winningHighlightStyles = getWinningHighlightStyles();
+  // Not using this variable, but keeping the function for future use
+  // const winningHighlightStyles = getWinningHighlightStyles();
 
   return (
-    <div className="board">
-      {/* Winning pieces are highlighted individually, no need for the outline */}
-      {board.map((column, columnIndex) => (
-        <div key={columnIndex} className="column" onClick={() => handleColumnClick(columnIndex)}>
-          {column.map((cell, rowIndex) => (
-            <Cell
-              key={rowIndex}
-              value={cell}
-              columnIndex={columnIndex}
-              onClick={() => {}}
-              showDisc={true}
-              isWinningPiece={winningPieces.some(piece => 
-                piece.col === columnIndex && piece.row === rowIndex
-              )}
-            />
-          ))}
-          
-          {/* Render falling discs */}
-          {fallingDiscs
-            .filter(disc => disc.column === columnIndex)
-            .map(disc => (
-              <div 
-                key={disc.key}
-                className={`falling-disc ${disc.player === 1 ? 'red' : 'yellow'}`}
+    <div className="board-container">
+      {/* Back layer */}
+      <div className="board-back"></div>
+      
+      {/* Middle layer - discs */}
+      <div className="discs-container">
+        {/* Render falling discs */}
+        {fallingDiscs.map(disc => (
+          <div 
+            key={disc.key}
+            className={`falling-disc ${disc.player === 1 ? 'red' : 'yellow'}`}
+            style={{
+              // Position horizontally based on column
+              left: `${disc.column * 80 + 40}px`,
+              // We need to be precise about the fall distance
+              // ROWS = 6 total rows, where 0 is bottom and 5 is top
+              // Row 0 (bottom) needs to fall all 6 rows (including above-board position)
+              ['--fall-distance' as string]: 6 - disc.row
+            }}
+          >
+            <div className="disc-inner"></div>
+          </div>
+        ))}
+
+        {/* Static placed discs */}
+        {board.map((column, columnIndex) => 
+          column.map((cell, rowIndex) => 
+            cell !== 0 && (
+              <div
+                key={`placed-${columnIndex}-${rowIndex}`}
+                className={`placed-disc ${cell === 1 ? 'red' : 'yellow'} ${
+                  winningPieces.some(piece => piece.col === columnIndex && piece.row === rowIndex) ? 'winning' : ''
+                }`}
                 style={{
-                  // We need to be precise about the fall distance
-                  // ROWS = 6 total rows, where 0 is bottom and 5 is top
-                  // Row 0 (bottom) needs to fall all 6 rows (including above-board position)
-                  ['--fall-distance' as string]: 6 - disc.row
+                  left: `${columnIndex * 80 + 40}px`,
+                  bottom: `${rowIndex * 80 + 40}px`
                 }}
               >
                 <div className="disc-inner"></div>
               </div>
+            )
+          )
+        )}
+      </div>
+      
+      {/* Front layer - board face with holes */}
+      <div className="board-front">
+        {board.map((column, columnIndex) => (
+          <div key={columnIndex} className="column" onClick={() => handleColumnClick(columnIndex)}>
+            {column.map((_, rowIndex) => (
+              <div key={rowIndex} className="cell-hole" />
             ))}
-        </div>
-      ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 });
