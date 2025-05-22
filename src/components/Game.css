@@ -1,0 +1,154 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #2563eb;
+}
+
+h1 {
+  color: #2563eb;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide the redundant reset button (now in header) */
+.reset-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .game {
+    padding: 10px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .game-info {
+    min-width: 150px;
+    padding: 8px 15px;
+  }
+  
+  .current-player, .winner, .draw {
+    font-size: 1rem;
+  }
+}
+
+.game-info {
+  margin-bottom: 15px;
+  padding: 12px 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #2563eb;
+}
+
+.current-player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-direction: row-reverse;
+}
+
+.player-indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.player-indicator.red {
+  background-color: #ef4444;
+  box-shadow: none;
+}
+
+.player-indicator.yellow {
+  background-color: #facc15;
+  box-shadow: none;
+}
+
+.winner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-weight: bold;
+  color: #2563eb;
+  flex-direction: row-reverse;
+}
+
+.winner-indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.winner-indicator.red {
+  background-color: #ef4444;
+  box-shadow: none;
+}
+
+.winner-indicator.yellow {
+  background-color: #facc15;
+  box-shadow: none;
+}
+
+.draw {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+/* Remove the animation on the current player */
+/* 
+@keyframes thinking {
+  0% { opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { opacity: 0.4; }
+}
+
+.current-player:has(.yellow) {
+  animation: thinking 1.5s infinite;
+}
+*/ 
+
+/* Remove the floating sound button styles */
+/* 
+.sound-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.sound-button:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+.sound-button svg {
+  width: 20px;
+  height: 20px;
+}
+*/ 

@@ -1,0 +1,114 @@
+.board {
+  display: flex;
+  background-color: #2563eb;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.winning-highlight {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 3px solid white;
+  border-radius: 40px;
+  z-index: 20;
+  pointer-events: none;
+  animation: highlight-pulse 1.5s infinite;
+  transform-origin: center center;
+}
+
+@keyframes highlight-pulse {
+  0% { opacity: 0.4; box-shadow: 0 0 5px white, 0 0 10px white; }
+  50% { opacity: 0.8; box-shadow: 0 0 15px white, 0 0 25px white; }
+  100% { opacity: 0.4; box-shadow: 0 0 5px white, 0 0 10px white; }
+}
+
+.column {
+  display: flex;
+  flex-direction: column-reverse;
+  position: relative;
+}
+
+.falling-disc {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  z-index: 10;
+  pointer-events: none;
+  /* Start at the top of the column */
+  top: -80px; 
+  animation-name: fall-and-bounce !important;
+  animation-duration: 0.6s !important;
+  animation-timing-function: cubic-bezier(0.5, 0, 1, 1) !important; /* Accelerate downward (gravity) */
+  animation-fill-mode: forwards !important;
+}
+
+/* Perfect linear fall with bounce ONLY at the end */
+@keyframes fall-and-bounce {
+  /* No keyframes at the beginning - smooth acceleration */
+  0% { transform: translateY(0); }
+  /* Single frame at exact landing point to ensure smooth motion */
+  83% { transform: translateY(calc(80px * var(--fall-distance, 1))); }
+  /* Impact and clear bounce at the bottom only - in the correct final row */
+  84% { transform: translateY(calc(80px * var(--fall-distance, 1))); } /* Initial impact */
+  90% { transform: translateY(calc(80px * var(--fall-distance, 1) - 10px)); } /* Bounce up */
+  96% { transform: translateY(calc(80px * var(--fall-distance, 1) + 3px)); } /* Bounce down */
+  100% { transform: translateY(calc(80px * var(--fall-distance, 1))); } /* Settle */
+}
+
+.falling-disc .disc-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+}
+
+.falling-disc.red .disc-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: #ef4444;
+  box-shadow: inset 0 0 10px #b91c1c, 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.falling-disc.yellow .disc-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background-color: #facc15;
+  box-shadow: inset 0 0 10px #ca8a04, 0 0 10px rgba(32, 12, 72, 0.3);
+}
+
+@media (max-width: 768px) {
+  .board {
+    padding: 10px;
+  }
+  
+  .column .cell {
+    width: 50px;
+    height: 50px;
+    margin: 3px;
+  }
+  
+  .falling-disc {
+    width: 50px;
+    height: 50px;
+    margin: 3px;
+    top: -56px; /* Smaller starting position for mobile */
+  }
+  
+  /* Mobile-specific animation with smaller cell size */
+  @keyframes fall-and-bounce {
+    0% { transform: translateY(0); }
+    83% { transform: translateY(calc(56px * var(--fall-distance, 1))); }
+    84% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Initial impact */
+    90% { transform: translateY(calc(56px * var(--fall-distance, 1) - 7px)); } /* Bounce up */
+    96% { transform: translateY(calc(56px * var(--fall-distance, 1) + 2px)); } /* Bounce down */
+    100% { transform: translateY(calc(56px * var(--fall-distance, 1))); } /* Settle */
+  }
+} 

@@ -1,0 +1,141 @@
+.game-header {
+  width: 100%;
+  max-width: 700px; /* Match board width */
+  margin: 0 auto 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.header-row:last-child {
+  margin-bottom: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.header-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.new-game-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.new-game-button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+.sound-button {
+  background-color: #f0f0f0;
+  color: #2563eb;
+  border: 1px solid #ddd;
+  width: 40px;
+  height: 36px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sound-button.sound-off {
+  background-color: #e74c3c;
+  color: white;
+  border-color: #c0392b;
+}
+
+.sound-button:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sound-button.sound-off:hover {
+  background-color: #c0392b;
+}
+
+.sound-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.games-played {
+  font-size: 1.05rem;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.win-stats {
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
+  gap: 12px;
+}
+
+.player-wins {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.ai-wins {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.separator {
+  color: #2563eb;
+  font-weight: 300;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .game-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .header-controls {
+    align-self: flex-end;
+  }
+  
+  .win-stats {
+    align-self: flex-end;
+  }
+} 
