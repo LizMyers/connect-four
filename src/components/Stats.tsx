@@ -31,7 +31,7 @@ const Stats: React.FC = () => {
         </div>
         <div className="stat-box">
           <span className="stat-value">{stats.aiWins}</span>
-          <span className="stat-label">AI Wins</span>
+          <span className="stat-label">Computer Wins</span>
         </div>
         <div className="stat-box">
           <span className="stat-value">{stats.gamesPlayed}</span>

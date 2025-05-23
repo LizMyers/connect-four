@@ -532,11 +532,11 @@ const Game: React.FC = () => {
   };
 
   const getPlayerName = (playerNum: number): string => {
-    return playerNum === PLAYER ? "You" : "Claude";
+    return playerNum === PLAYER ? "You" : "Computer";
   };
 
   const getPlayerTurnText = (playerNum: number): string => {
-    return playerNum === PLAYER ? "Your turn" : "Claude's turn";
+    return playerNum === PLAYER ? "Your turn" : "Computer's turn";
   };
 
   // Calculate draws

@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           <div className="current-player">
             {isThinking ? (
-              <>Claude is thinking...</>
+              <>Computer is thinking...</>
             ) : (
               <>{getPlayerTurnText(currentPlayer)}</>
             )}
@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="win-stats">
           <span className="player-wins">Your wins: {playerWins}</span>
           <span className="separator">|</span>
-          <span className="ai-wins">Claude wins: {aiWins}</span>
+          <span className="ai-wins">Computer wins: {aiWins}</span>
           <span className="separator">|</span>
           <span className="draws">Draws: {draws}</span>
         </div>
